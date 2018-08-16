@@ -2,20 +2,27 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
-var app = express();
 const path = require('path');
 
+var app = express();
+
+mongoose.connect(process.env.MONGODB_URI);
+
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://.herokuapp.com');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Origin',
+        'https://cs4550-bk610-angular-client.herokuapp.com/');
+    res.header('Access-Control-Allow-Credentials',
+        'true');
+    res.header('Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept');
     next();
+
+
 });
-
-
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
@@ -23,8 +30,6 @@ app.use(session({
     saveUninitialized: true,
     secret: 'any string'
 }));
-
-mongoose.connect('mongodb://eh:cs4550@ds123129.mlab.com:23129/eh-cs4550');
 
 const userService = require('./services/user.service.server');
 userService(app);
@@ -63,7 +68,6 @@ function resetSession(req, res) {
     res.sendStatus(200);
 }
 
-/*REQUESTS*/
 app.get('/api/session/set/:name/:value',
     setSession);
 app.get('/api/session/get/:name',
@@ -74,7 +78,6 @@ app.get('/api/session/reset',
     resetSession);
 
 app.get('/*', function(req,res) {
-
-    res.sendFile(path.join(__dirname,'/dist//*cs4550-ehao-angular-client*//index.html'));
+    res.sendFile(path.join(__dirname,'/dist/cs4550-bk610-angular-client/index.html'));
 });
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 4200);
