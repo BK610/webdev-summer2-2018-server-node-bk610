@@ -6,16 +6,6 @@ module.exports = function (app) {
     var sectionModel = require('../../models/section/section.model.server');
     var enrollmentModel = require('../../models/enrollment/enrollment.model.server');
 
-    function findSectionsForStudent(req, res) {
-        var currentUser = req.session.currentUser;
-        var studentId = currentUser._id;
-        enrollmentModel
-            .findSectionsForStudent(studentId)
-            .then(function (enrollments) {
-                res.json(enrollments);
-            });
-    }
-
     function enrollStudentInSection(req, res) {
         var sectionId = req.params.sectionId;
         var currentUser = req.session.currentUser;
@@ -54,6 +44,16 @@ module.exports = function (app) {
                     res.sendStatus(404)
                 }
             })
+    }
+
+    function findSectionsForStudent(req, res) {
+        var currentUser = req.session.currentUser;
+        var studentId = currentUser._id;
+        enrollmentModel
+            .findSectionsForStudent(studentId)
+            .then(function (enrollments) {
+                res.json(enrollments);
+            });
     }
 
     function unenrollStudentInSection(req, res) {
