@@ -29,16 +29,12 @@ app.use(session({
 }));
 
 const userService = require('./services/user/user.service.server');
-// const sectionService = require('./services/section.service.server');
-// const quizService = require('./services/quiz.service.server');
-// const questionService = require('./services/question.service.server');
-// const submissionService = require('./services/submission.service.server');
+const sectionService = require('./services/section/section.service.server');
+const enrollmentService = require('./services/enrollment/enrollment.service.server');
 
 userService(app);
-// sectionService(app);
-// quizService(app);
-// questionService(app);
-// submissionService(app);
+sectionService(app);
+enrollmentService(app);
 
 function setSession(req, res) {
     var name = req.params['name'];
@@ -53,9 +49,9 @@ function getSession(req, res) {
     res.send(value);
 }
 
-function getSessionAll(req, res) {
-    res.send(req.session);
-}
+// function getSessionAll(req, res) {
+//     res.send(req.session);
+// }
 
 function resetSession(req, res) {
     req.session.destroy();
@@ -66,8 +62,8 @@ app.get('/api/session/set/:name/:value',
     setSession);
 app.get('/api/session/get/:name',
     getSession);
-app.get('/api/session/get',
-    getSessionAll);
+// app.get('/api/session/get',
+//     getSessionAll);
 app.get('/api/session/reset',
     resetSession);
 
