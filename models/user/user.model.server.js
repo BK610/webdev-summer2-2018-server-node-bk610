@@ -21,6 +21,7 @@ function createUser(user) {
 }
 
 function findAllUsers() {
+    console.log("finding all users");
     return userModel.find();
 }
 

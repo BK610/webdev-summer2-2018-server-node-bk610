@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin',
-        'https://cs4550-bk610-angular-client.herokuapp.com/');
+        '*');
     res.header('Access-Control-Allow-Credentials',
         'true');
     res.header('Access-Control-Allow-Methods',
@@ -18,13 +18,10 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept');
     next();
-
-
 });
+
 app.use(bodyParser.json());
-
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(session({
     resave: false,
     saveUninitialized: true,
@@ -32,18 +29,15 @@ app.use(session({
 }));
 
 const userService = require('./services/user.service.server');
-userService(app);
-
 const sectionService = require('./services/section.service.server');
-sectionService(app);
-
 const quizService = require('./services/quiz.service.server');
-quizService(app);
-
 const questionService = require('./services/question.service.server');
-questionService(app);
-
 const submissionService = require('./services/submission.service.server');
+
+userService(app);
+sectionService(app);
+quizService(app);
+questionService(app);
 submissionService(app);
 
 function setSession(req, res) {
