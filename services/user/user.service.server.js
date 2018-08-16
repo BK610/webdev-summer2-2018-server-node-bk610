@@ -2,11 +2,13 @@ module.exports = app => {
 
     const userModel = require('../../models/user/user.model.server');
 
-    findAllUsers = (req, res) =>
+    findAllUsers = (req, res) => {
+        console.log("Finding all users in service");
         userModel.findAllUsers()
             .then(users => {
                 res.send(users);
             });
+    };
 
     login = (req, res) => {
         const user = req.body;
@@ -19,7 +21,7 @@ module.exports = app => {
 
     currentUser = (req, res) => {
         const currentUser = req.session['currentUser'];
-        if(currentUser) {
+        if (currentUser) {
             userModel.findUserById(currentUser._id)
                 .then(user => res.send(user))
         } else {
@@ -27,7 +29,7 @@ module.exports = app => {
         }
     }
 
-    app.get ('/currentUser', currentUser);
-    app.get ('/api/user', findAllUsers);
+    app.get('/currentUser', currentUser);
+    app.get('/api/user', findAllUsers);
     app.post('/login', login);
 };
