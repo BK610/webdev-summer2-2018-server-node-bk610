@@ -49,9 +49,9 @@ function getSession(req, res) {
     res.send(value);
 }
 
-// function getSessionAll(req, res) {
-//     res.send(req.session);
-// }
+function getSessionAll(req, res) {
+    res.send(req.session);
+}
 
 function resetSession(req, res) {
     req.session.destroy();
@@ -62,12 +62,12 @@ app.get('/api/session/set/:name/:value',
     setSession);
 app.get('/api/session/get/:name',
     getSession);
-// app.get('/api/session/get',
-//     getSessionAll);
+app.get('/api/session/get',
+    getSessionAll);
 app.get('/api/session/reset',
     resetSession);
 
 app.get('/*', function(req,res) {
     res.sendFile(path.join(__dirname,'/dist/cs4550-bk610-angular-client/index.html'));
 });
-app.listen(process.env.PORT || 4200);
+app.listen(process.env.PORT || 8080);
