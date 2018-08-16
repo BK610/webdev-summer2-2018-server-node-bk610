@@ -6,7 +6,7 @@ const path = require('path');
 
 var app = express();
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect('mongodb://heroku_kznkmz7s:h0i09tmeaq01ktek1d8763k3pl@ds123532.mlab.com:23532/heroku_kznkmz7s');
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin',
@@ -28,17 +28,17 @@ app.use(session({
     secret: 'any string'
 }));
 
-const userService = require('./services/user.service.server');
-const sectionService = require('./services/section.service.server');
-const quizService = require('./services/quiz.service.server');
-const questionService = require('./services/question.service.server');
-const submissionService = require('./services/submission.service.server');
+const userService = require('./services/user/user.service.server');
+// const sectionService = require('./services/section.service.server');
+// const quizService = require('./services/quiz.service.server');
+// const questionService = require('./services/question.service.server');
+// const submissionService = require('./services/submission.service.server');
 
 userService(app);
-sectionService(app);
-quizService(app);
-questionService(app);
-submissionService(app);
+// sectionService(app);
+// quizService(app);
+// questionService(app);
+// submissionService(app);
 
 function setSession(req, res) {
     var name = req.params['name'];
