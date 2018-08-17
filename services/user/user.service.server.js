@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.get('/api/user', findAllUsers);
-    app.get('/api/login/active', checkIfLoggedIn);
+    app.get('/api/user/current', findCurrentUser);
+    // app.get('/api/login/active', checkIfLoggedIn);
     app.get('/api/user/:userId', findUserById);
     app.post('/api/register', createUser);
     app.get('/api/profile', profile);
@@ -8,7 +9,6 @@ module.exports = function (app) {
     app.post('/api/login', login);
     app.put('/api/profile', updateUser);
     app.delete('/api/profile', deleteUser);
-
 
     var userModel = require('../../models/user/user.model.server');
 
@@ -95,12 +95,25 @@ module.exports = function (app) {
             })
     }
 
-    function checkIfLoggedIn(req, res) {
-        var user = req.session['currentUser'];
-        if (user === undefined) {
-            res.sendStatus(404);
+    // function checkIfLoggedIn(req, res) {
+    //     var user = req.session['currentUser'];
+    //     if (user === undefined) {
+    //         res.sendStatus(404);
+    //     } else {
+    //         res.sendStatus(200);
+    //     }
+    // }
+
+    function findCurrentUser(req, res) {
+        const currentUser = req.session['currentUser'];
+        if (currentUser) {
+            userModel.findUserById(currentUser._id)
+                .then(user =>{
+                    res.send(user);
+                });
         } else {
-            res.sendStatus(200);
+            res.sendStatus(403);
         }
+
     }
 };

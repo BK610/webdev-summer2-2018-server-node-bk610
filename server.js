@@ -10,7 +10,7 @@ mongoose.connect('mongodb://heroku_kznkmz7s:h0i09tmeaq01ktek1d8763k3pl@ds123532.
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin',
-        '*');
+        'http://localhost:4200 https://cs4550-bk610-angular-client.herokuapp.com/');
     res.header('Access-Control-Allow-Credentials',
         'true');
     res.header('Access-Control-Allow-Methods',
@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     resave: false,
     saveUninitialized: true,
-    secret: 'any string'
+    secret: 'secret'
 }));
 
 const userService = require('./services/user/user.service.server');
