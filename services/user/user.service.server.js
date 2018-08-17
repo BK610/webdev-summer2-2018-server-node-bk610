@@ -24,7 +24,7 @@ module.exports = function (app) {
                     userModel.createUser(user)
                         .then(function (user) {
                             req.session['currentUser'] = user;
-                            res.send(user);
+                            res.sendStatus(200);
                         })
                 } else {
                     res.sendStatus(404);
@@ -39,7 +39,7 @@ module.exports = function (app) {
             .then(function (user) {
                 if (user !== null) {
                     req.session['currentUser'] = user;
-                    res.json(user);
+                    res.sendStatus(200);
                 } else {
                     res.sendStatus(404);
                 }
@@ -106,6 +106,7 @@ module.exports = function (app) {
 
     function findCurrentUser(req, res) {
         const currentUser = req.session['currentUser'];
+        console.log(currentUser);
         if (currentUser) {
             userModel.findUserById(currentUser._id)
                 .then(user =>{
