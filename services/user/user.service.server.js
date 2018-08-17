@@ -3,12 +3,12 @@ module.exports = function (app) {
     app.get('/api/user/current', findCurrentUser);
     // app.get('/api/login/active', checkIfLoggedIn);
     app.get('/api/user/:userId', findUserById);
-    app.post('/api/register', createUser);
-    app.get('/api/profile', profile);
-    app.post('/api/logout', logout);
-    app.post('/api/login', login);
-    app.put('/api/profile', updateUser);
-    app.delete('/api/profile', deleteUser);
+    app.post('/api/user/register', createUser);
+    app.get('/api/user/profile', profile);
+    app.post('/api/user/logout', logout);
+    app.post('/api/user/login', login);
+    app.put('/api/user/profile', updateUser);
+    app.delete('/api/user/:userId', deleteUser);
 
     var userModel = require('../../models/user/user.model.server');
 
