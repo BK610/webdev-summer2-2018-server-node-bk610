@@ -1,79 +1,52 @@
 module.exports = function (app) {
-    app.post('/api/student/:sectionId/section', enrollStudentInSection);
-    app.delete('/api/student/:sectionId/section', unenrollStudentInSection);
-    app.get('/api/student/section', findSectionsForStudent);
-
     var sectionModel = require('../../models/section/section.model.server');
     var enrollmentModel = require('../../models/enrollment/enrollment.model.server');
 
     function enrollStudentInSection(req, res) {
-        var sectionId = req.params.sectionId;
-        var currentUser = req.session.currentUser;
-        var studentId = currentUser._id;
+        var studentId = req.params['studentId'];
+        var sectionId = req.params['sectionId'];
         var enrollment = {
             student: studentId,
             section: sectionId
         };
-
-        var success;
-        var section;
-        enrollmentModel.findEnrollmentByPair(enrollment)
-            .then(function (response) {
-                success = response === null;
-            })
-            .then(function () {
-                return sectionModel.findSectionById(sectionId)
-                    .then(function (response) {
-                        section = response;
+        enrollmentModel.enrollStudentInSection(enrollment)
+            .then(response => res.send(response.json()))
+            .then(() => {
+                enrollmentModel.findEnrollmentByPair(enrollment)
+                    .then(enrollment => {
+                        sectionModel.decrementSectionSeats(enrollment.section);
+                        res.send(enrollment.json());
                     })
-            })
-            .then(function () {
-                if (section.seats <= 0) {
-                    res.sendStatus(403);
-                } else if (success) {
-                    sectionModel
-                        .decrementSectionSeats(sectionId)
-                        .then(function () {
-                            return enrollmentModel
-                                .enrollStudentInSection(enrollment)
-                        })
-                        .then(function (enrollment) {
-                            res.json(enrollment);
-                        })
-                } else {
-                    res.sendStatus(404)
-                }
-            })
-    }
-
-    function findSectionsForStudent(req, res) {
-        var currentUser = req.session.currentUser;
-        var studentId = currentUser._id;
-        enrollmentModel
-            .findSectionsForStudent(studentId)
-            .then(function (enrollments) {
-                res.json(enrollments);
             });
     }
 
-    function unenrollStudentInSection(req, res) {
-        var enrollmentId = req.params.sectionId;
-        var enrollment;
-        enrollmentModel.findEnrollmentById(enrollmentId)
-            .then(function (response) {
-                enrollment = response;
-            })
-            .then(function () {
-                sectionModel
-                    .incrementSectionSeats(enrollment.section)
-                    .then(function () {
-                        return enrollmentModel
-                            .unenrollStudentInSection(enrollmentId)
-                    })
-                    .then(function (enrollment) {
-                        res.json(enrollment);
-                    })
-
-            })
+    function findSectionsForStudent(req, res) {
+        var studentId = req.params['studentId'];
+        enrollmentModel.findSectionsForStudent(studentId)
+            .then(response => res.send(response.json()));
     }
-};
+
+    function unenrollStudentInSection(req, res) {
+        var studentId = req.params['sectionId'];
+        var sectionId = req.params['sectionId'];
+        var unenrollment = {
+            student: studentId,
+            section: sectionId
+        }
+        enrollmentModel.unenrollStudentInSection(unenrollment)
+            .then(response => {
+                res.send(response.json())
+            })
+            .then(() => {
+                enrollmentModel.findEnrollmentByPair(unenrollment)
+                    .then(enrollment => {
+                        sectionModel.incrementSectionSeats(enrollment.section);
+                        res.send(enrollment.json());
+                    })
+            });
+    }
+
+    app.post('/api/student/:studentId/section/:sectionId', enrollStudentInSection);
+    app.delete('/api/student/:studentId/section/:sectionId', unenrollStudentInSection);
+    app.get('/api/student/:studentId/section', findSectionsForStudent);
+}

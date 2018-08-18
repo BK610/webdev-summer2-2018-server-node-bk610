@@ -1,15 +1,4 @@
 module.exports = function (app) {
-    app.get('/api/user', findAllUsers);
-    app.get('/api/current', findCurrentUser);
-    app.post('/api/register', register);
-    app.get('/api/profile', profile);
-    app.post('/api/logout', logout);
-    app.post('/api/login', login);
-    app.put('/api/profile', updateUser);
-    // app.get('/api/login/active', checkIfLoggedIn);
-    app.get('/api/user/:userId', findUserById);
-    app.delete('/api/profile/', deleteUser);
-
     var userModel = require('../../models/user/user.model.server');
 
     function register(req, res) {
@@ -34,8 +23,7 @@ module.exports = function (app) {
 
     function login(req, res) {
         var credentials = req.body;
-        userModel
-            .findUserByCredentials(credentials)
+        userModel.findUserByCredentials(credentials)
             .then(function (user) {
                 if (user !== null) {
                     req.session['currentUser'] = user;
@@ -120,4 +108,15 @@ module.exports = function (app) {
         }
 
     }
+
+    app.get('/api/user', findAllUsers);
+    app.get('/api/current', findCurrentUser);
+    app.post('/api/register', register);
+    app.get('/api/profile', profile);
+    app.post('/api/logout', logout);
+    app.post('/api/login', login);
+    app.put('/api/profile', updateUser);
+    // app.get('/api/login/active', checkIfLoggedIn);
+    app.get('/api/user/:userId', findUserById);
+    app.delete('/api/profile/', deleteUser);
 };

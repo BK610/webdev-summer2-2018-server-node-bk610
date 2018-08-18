@@ -16,19 +16,11 @@ function findSectionById(sectionId) {
 }
 
 function decrementSectionSeats(sectionId) {
-    return sectionModel.update({
-        _id: sectionId
-    }, {
-        $inc: {seats: -1}
-    });
+    return sectionModel.update({_id: sectionId}, {$inc: {seats: -1}});
 }
 
 function incrementSectionSeats(sectionId) {
-    return sectionModel.update({
-        _id: sectionId
-    }, {
-        $inc: {seats: +1}
-    });
+    return sectionModel.update({_id: sectionId}, {$inc: {seats: +1}});
 }
 
 function deleteSection(sectionId) {
