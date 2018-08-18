@@ -5,9 +5,7 @@ module.exports = function (app) {
     function createSection(req, res) {
         var section = req.body;
         var courseId = req.params['courseId'];
-        //section.courseId = courseId;
-        sectionModel
-            .createSection(section)
+        sectionModel.createSection(section)
             .then(function (section) {
                 res.json(section);
             })
@@ -15,8 +13,7 @@ module.exports = function (app) {
 
     function findSectionsForCourse(req, res) {
         var courseId = req.params['courseId'];
-        sectionModel
-            .findSectionsForCourse(courseId)
+        sectionModel.findSectionsForCourse(courseId)
             .then(function (sections) {
                 res.json(sections);
             })
