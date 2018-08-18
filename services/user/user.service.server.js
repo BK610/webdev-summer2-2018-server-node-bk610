@@ -8,7 +8,7 @@ module.exports = function (app) {
     app.put('/api/profile', updateUser);
     // app.get('/api/login/active', checkIfLoggedIn);
     app.get('/api/user/:userId', findUserById);
-    app.delete('/api/:userId', deleteUser);
+    app.delete('/api/profile/', deleteUser);
 
     var userModel = require('../../models/user/user.model.server');
 
