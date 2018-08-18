@@ -21,7 +21,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
     resave: false,
     saveUninitialized: true,
@@ -37,6 +37,7 @@ sectionService(app);
 enrollmentService(app);
 
 function setSession(req, res) {
+    console.log(req.params);
     var name = req.params['name'];
     var value = req.params['value'];
     req.session[name] = value;
@@ -50,6 +51,8 @@ function getSession(req, res) {
 }
 
 function getSessionAll(req, res) {
+    // console.log("Session??\n" + req.session);
+    // console.log(res);
     res.send(req.session);
 }
 

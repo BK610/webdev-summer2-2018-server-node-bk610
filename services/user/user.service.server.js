@@ -23,7 +23,9 @@ module.exports = function (app) {
                 if (success) {
                     userModel.createUser(user)
                         .then(function (user) {
+                            console.log(user);
                             req.session['currentUser'] = user;
+                            console.log(req.session);
                             res.sendStatus(200);
                         })
                 } else {
@@ -81,6 +83,7 @@ module.exports = function (app) {
     }
 
     function findUserById(req, res) {
+        // console.log("Finding by id:\n" + req.params);
         var id = req.params['userId'];
         userModel.findUserById(id)
             .then(function (user) {
@@ -105,15 +108,21 @@ module.exports = function (app) {
     // }
 
     function findCurrentUser(req, res) {
-        const currentUser = req.session['currentUser'];
-        console.log(currentUser);
-        if (currentUser) {
-            userModel.findUserById(currentUser._id)
-                .then(user =>{
-                    res.send(user);
-                });
+        // console.log('finding current user');
+        // console.log('session: ' + req.session);
+        if (req.session['currentUser'] === undefined) {
+            res.send(403);
         } else {
-            res.sendStatus(403);
+            const currentUser = req.session['currentUser'];
+            // console.log("What" + currentUser);
+            if (currentUser) {
+                userModel.findUserById(currentUser._id)
+                    .then(user => {
+                        res.send(user);
+                    });
+            } else {
+                res.sendStatus(403);
+            }
         }
 
     }
