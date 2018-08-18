@@ -1,18 +1,18 @@
 module.exports = function (app) {
     app.get('/api/user', findAllUsers);
-    app.get('/api/user/current', findCurrentUser);
     // app.get('/api/login/active', checkIfLoggedIn);
     app.get('/api/user/:userId', findUserById);
-    app.post('/api/user/register', createUser);
+    app.get('/api/user/current', findCurrentUser);
+    app.post('/api/user/register', register);
     app.get('/api/user/profile', profile);
-    app.post('/api/user/logout', logout);
     app.post('/api/user/login', login);
+    app.post('/api/user/logout', logout);
     app.put('/api/user/profile', updateUser);
     app.delete('/api/user/:userId', deleteUser);
 
     var userModel = require('../../models/user/user.model.server');
 
-    function createUser(req, res) {
+    function register(req, res) {
         var user = req.body;
         var success;
         userModel.findUserByUsername(user.username)
@@ -67,7 +67,7 @@ module.exports = function (app) {
                 if (response.ok === 1) {
                     res.json(user);
                 } else {
-                    res.sendStatus(404);
+                    res.json(404);
                 }
             })
     }
