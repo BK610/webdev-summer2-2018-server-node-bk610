@@ -1,7 +1,6 @@
 let mongoose = require('mongoose');
 
 let userSchema = mongoose.Schema({
-    type: mongoose.Schema.Types.ObjectId,
     username: String,
     password: String,
     firstName: String,
@@ -10,11 +9,7 @@ let userSchema = mongoose.Schema({
     phone: String,
     address: String,
     role: String,
-    sections: [{
-        type: mongoose.Schema.Types.ObjectId,
-        require: true,
-        ref: 'SectionModel'
-    }]
+    sections: [String]
 }, {collection: 'user'});
 
 module.exports = userSchema;

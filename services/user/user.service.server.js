@@ -1,14 +1,14 @@
 module.exports = function (app) {
     app.get('/api/user', findAllUsers);
+    app.get('/api/current', findCurrentUser);
+    app.post('/api/register', register);
+    app.get('/api/profile', profile);
+    app.post('/api/logout', logout);
+    app.post('/api/login', login);
+    app.put('/api/profile', updateUser);
     // app.get('/api/login/active', checkIfLoggedIn);
     app.get('/api/user/:userId', findUserById);
-    app.get('/api/user/current', findCurrentUser);
-    app.post('/api/user/register', register);
-    app.get('/api/user/profile', profile);
-    app.post('/api/user/login', login);
-    app.post('/api/user/logout', logout);
-    app.put('/api/user/profile', updateUser);
-    app.delete('/api/user/:userId', deleteUser);
+    app.delete('/api/:userId', deleteUser);
 
     var userModel = require('../../models/user/user.model.server');
 
@@ -23,9 +23,7 @@ module.exports = function (app) {
                 if (success) {
                     userModel.createUser(user)
                         .then(function (user) {
-                            console.log(user);
                             req.session['currentUser'] = user;
-                            console.log(req.session);
                             res.sendStatus(200);
                         })
                 } else {
@@ -69,7 +67,7 @@ module.exports = function (app) {
                 if (response.ok === 1) {
                     res.json(user);
                 } else {
-                    res.json(404);
+                    res.sendStatus(404);
                 }
             })
     }
@@ -83,7 +81,8 @@ module.exports = function (app) {
     }
 
     function findUserById(req, res) {
-        // console.log("Finding by id:\n" + req.params);
+        console.log("Finding user by id");
+        console.log(req.params);
         var id = req.params['userId'];
         userModel.findUserById(id)
             .then(function (user) {
@@ -108,21 +107,16 @@ module.exports = function (app) {
     // }
 
     function findCurrentUser(req, res) {
-        // console.log('finding current user');
-        // console.log('session: ' + req.session);
-        if (req.session['currentUser'] === undefined) {
-            res.send(403);
+        const currentUser = req.session['currentUser'];
+        console.log(req.session);
+        console.log(currentUser);
+        if (currentUser) {
+            userModel.findUserById(currentUser._id)
+                .then(user =>{
+                    res.send(user);
+                });
         } else {
-            const currentUser = req.session['currentUser'];
-            // console.log("What" + currentUser);
-            if (currentUser) {
-                userModel.findUserById(currentUser._id)
-                    .then(user => {
-                        res.send(user);
-                    });
-            } else {
-                res.sendStatus(403);
-            }
+            res.sendStatus(403);
         }
 
     }
