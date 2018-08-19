@@ -15,6 +15,7 @@ function findEnrollmentByPair(pair) {
 // }
 
 function enrollStudentInSection(enrollment) {
+    console.log(enrollment);
     return enrollmentModel.create(enrollment);
 }
 

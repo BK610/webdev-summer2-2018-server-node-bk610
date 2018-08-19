@@ -31,6 +31,10 @@ function updateSection(section, sectionId) {
     return sectionModel.update({_id: sectionId}, {$set: section});
 }
 
+function findAllSections() {
+    return sectionModel.find();
+}
+
 module.exports = {
     createSection: createSection,
     findSectionsForCourse: findSectionsForCourse,
@@ -38,5 +42,6 @@ module.exports = {
     incrementSectionSeats: incrementSectionSeats,
     findSectionById: findSectionById,
     deleteSection: deleteSection,
-    updateSection: updateSection
+    updateSection: updateSection,
+    findAllSections: findAllSections
 };
