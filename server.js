@@ -31,10 +31,14 @@ app.use(session({
 const userService = require('./services/user/user.service.server');
 const sectionService = require('./services/section/section.service.server');
 const enrollmentService = require('./services/enrollment/enrollment.service.server');
+const quizService = require('./services/quiz/quiz.service.server');
+const submissionService = require('./services/submission/submission.service.server');
 
 userService(app);
 sectionService(app);
 enrollmentService(app);
+quizService(app);
+submissionService(app);
 
 function setSession(req, res) {
     console.log(req.params);
